@@ -12,33 +12,36 @@ import { ProductService } from '../services/product.service';
 export class ProductAddComponent implements OnInit {
 
   productAddForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private productService:ProductService,private toastrService:ToastrService) { }
+  constructor(private formBuilder: FormBuilder, private productService: ProductService, private toastrService: ToastrService) { }
 
   ngOnInit(): void {
     this.createProductAddForm();
   }
 
-  createProductAddForm(){
+  createProductAddForm() {
     this.productAddForm = this.formBuilder.group({
-      productName:["",Validators.required],
-      unitPrice: ["",Validators.required],
-      unitsInStock:["", Validators.required],
-      categoryId:["",Validators.required]
+      productName: ["", Validators.required],
+      unitPrice: ["", Validators.required],
+      unitsInStock: ["", Validators.required],
+      categoryId: ["", Validators.required]
     })
- }
- add(){
-  if(this.productAddForm.valid){
-    let productModel =Object.assign({},this.productAddForm.value)
-    this.productService.add(productModel).subscribe(response=>{
-      console.log(response)
-      this.toastrService.success("Ürün Eklendi","Başarılı")
-    },responseError=>{
-      console.log(responseError)
-      this.toastrService.error(responseError.error)
-    })
-    
-  }else{
-    this.toastrService.error("Formunuz eksik","Dikkat")
   }
- }
+
+  add() {
+    if (this.productAddForm.valid) {
+      let productModel = Object.assign({}, this.productAddForm.value)
+      this.productService.add(productModel).subscribe(response => {
+        this.toastrService.success("Ürün Eklendi", "Başarılı")
+      }, responseError => {
+        if (responseError.error.Errors.length > 0) {
+          for (let i = 0; i < responseError.error.Errors.length; i++) {
+            this.toastrService.error(responseError.error.Errors[i].ErrorMessage, "Doğrulama Hatası")
+          }
+        }
+      })
+
+    } else {
+      this.toastrService.error("Formunuz eksik", "Dikkat")
+    }
+  }
 }
