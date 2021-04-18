@@ -2,7 +2,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ProductService } from '../services/product.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-add',
